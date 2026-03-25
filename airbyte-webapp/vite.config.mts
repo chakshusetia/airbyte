@@ -20,6 +20,8 @@ import {
 } from "./packages/vite-plugins";
 
 export default defineConfig(() => {
+  const apiProxyTarget = process.env.AIRBYTE_API_PROXY_TARGET ?? "http://localhost:8000";
+
   const config: UserConfig = {
     plugins: [
       environmentVariables(),
@@ -130,6 +132,16 @@ export default defineConfig(() => {
       host: true,
       port: Number(process.env.PORT) || 3000,
       strictPort: true,
+      proxy: {
+        // When running the webapp locally, the backend often runs on http://localhost:8000 (no TLS).
+        // Since the dev server uses HTTPS (basicSsl), direct calls to http://localhost:8000 would be blocked
+        // by the browser as mixed content. Proxying keeps requests same-origin.
+        "/api": {
+          target: apiProxyTarget,
+          changeOrigin: true,
+          secure: false,
+        },
+      },
       headers: {
         "Content-Security-Policy": "script-src * 'unsafe-inline'; worker-src 'self' blob:;",
       },

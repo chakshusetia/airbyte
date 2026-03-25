@@ -22,6 +22,23 @@ For an instruction how to develop on the webapp, please refer to our [documentat
 
 Please also check our [styleguide](./STYLEGUIDE.md) for details around code styling and best-practises.
 
+### Running locally against a backend on `localhost:8000`
+
+The dev server runs with HTTPS by default (see `@vitejs/plugin-basic-ssl`), while a locally running Airbyte backend
+often runs on plain HTTP at `http://localhost:8000`. Browsers will block direct HTTPS → HTTP calls as mixed content.
+
+In dev mode, the webapp proxies `/api/*` to the backend (default target: `http://localhost:8000`). This allows running
+the webapp at `https://localhost:3000` without needing `local.airbyte.dev`.
+
+PowerShell example:
+
+```powershell
+cd airbyte-webapp
+$env:AIRBYTE_API_PROXY_TARGET = "http://localhost:8000"  # optional, this is the default
+pnpm install
+pnpm start local
+```
+
 ### Folder Structure
 
 **Services** folders contain "services" which are usually React Context implementations

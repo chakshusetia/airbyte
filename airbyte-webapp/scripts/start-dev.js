@@ -83,15 +83,26 @@ async function main() {
 
     console.log(env.apiUrl);
 
+    const viteEnv = { ...process.env };
+    // For `local`, default to same-origin (https://localhost:3000) and rely on the Vite `/api` proxy.
+    // This avoids needing `local.airbyte.dev` or HTTPS on the backend (mixed-content blocking).
+    if (process.env.REACT_APP_API_URL !== undefined) {
+      viteEnv.REACT_APP_API_URL = process.env.REACT_APP_API_URL;
+    } else if (selectedEnv !== "local") {
+      viteEnv.REACT_APP_API_URL = env.apiUrl;
+    }
+
+    if (process.env.REACT_APP_KEYCLOAK_BASE_URL !== undefined) {
+      viteEnv.REACT_APP_KEYCLOAK_BASE_URL = process.env.REACT_APP_KEYCLOAK_BASE_URL;
+    } else if (selectedEnv !== "local") {
+      viteEnv.REACT_APP_KEYCLOAK_BASE_URL = env.apiUrl;
+    }
+
     if (options.preview) {
       console.log(`\n> pnpm vite build && pnpm vite preview --port "3000"}\n`);
       await spawn("pnpm", ["vite", "build"], {
         stdio: "inherit",
-        env: {
-          ...process.env,
-          REACT_APP_API_URL: process.env.REACT_APP_API_URL ?? env.apiUrl,
-          REACT_APP_KEYCLOAK_BASE_URL: env.apiUrl,
-        },
+        env: viteEnv,
       });
       await spawn("pnpm", ["vite", "preview", "--port", `"3000"`], {
         stdio: "inherit",
@@ -100,11 +111,7 @@ async function main() {
       console.log("\n> pnpm vite\n");
       await spawn("pnpm", ["vite"], {
         stdio: "inherit",
-        env: {
-          ...process.env,
-          REACT_APP_API_URL: process.env.REACT_APP_API_URL ?? env.apiUrl,
-          REACT_APP_KEYCLOAK_BASE_URL: env.apiUrl,
-        },
+        env: viteEnv,
       });
     }
   } catch (e) {

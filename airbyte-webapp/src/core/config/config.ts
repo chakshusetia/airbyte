@@ -1,7 +1,10 @@
 import { BuildConfig } from "./types";
 
 export const buildConfig: BuildConfig = {
-  apiUrl: process.env.REACT_APP_API_URL ?? "",
+  apiUrl:
+    process.env.REACT_APP_API_URL && process.env.REACT_APP_API_URL.trim().length > 0
+      ? process.env.REACT_APP_API_URL
+      : window.location.origin,
   keycloakBaseUrl: process.env.REACT_APP_KEYCLOAK_BASE_URL ?? window.location.origin,
 };
 
