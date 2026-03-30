@@ -7,7 +7,8 @@ import { useGetWorkspace } from "core/api";
 import { useAuthService } from "core/services/auth";
 import { useLocalStorage } from "core/utils/useLocalStorage";
 
-const AIRBYTE = "Airbyte";
+// const AIRBYTE = "Airbyte";
+const AIRBYTE = "HabileLabs";
 const SEPARATOR = "|";
 
 interface FormattedHeadTitle {
@@ -66,9 +67,15 @@ export const HeadTitle: React.FC<HeadTitleProps> = ({ titles }) => {
     return <WorkspacePrefixedTitle title={headTitle} />;
   }
 
+  // return (
+  //   <Helmet titleTemplate={`${AIRBYTE} ${SEPARATOR} %s`} defaultTitle={AIRBYTE}>
+  //     <title>{headTitle}</title>
+  //   </Helmet>
+  // );
+
   return (
-    <Helmet titleTemplate={`${AIRBYTE} ${SEPARATOR} %s`} defaultTitle={AIRBYTE}>
-      <title>{headTitle}</title>
+    <Helmet>
+      <title>{AIRBYTE}</title>
     </Helmet>
   );
 };

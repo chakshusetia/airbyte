@@ -1,45 +1,15 @@
 {
-  "short_name": "Airbyte",
-  "name": "Airbyte",
+  "short_name": "HabileLabs",
+  "name": "HabileLabs",
   "icons": [
     {
-      "src": "icon_blue_16.png",
-      "type": "image/png",
-      "sizes": "16x16"
-    },
-    {
-      "src": "icon_blue_24.png",
-      "type": "image/png",
-      "sizes": "24x24"
-    },
-    {
-      "src": "icon_blue_32.png",
-      "type": "image/png",
-      "sizes": "32x32"
-    },
-    {
-      "src": "icon_blue_64.png",
-      "type": "image/png",
-      "sizes": "64x64"
-    },
-    {
-      "src": "icon_blue_112.png",
-      "type": "image/png",
-      "sizes": "112x112"
-    },
-    {
-      "src": "icon_blue_224.png",
-      "type": "image/png",
-      "sizes": "224x224"
-    },
-    {
-      "src": "logo.png",
-      "type": "image/png",
-      "sizes": "336x336"
+      "src": "favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any"
     }
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#625EFF",
+  "theme_color": "#30ADE7",
   "background_color": "#F8F8FF"
 }
