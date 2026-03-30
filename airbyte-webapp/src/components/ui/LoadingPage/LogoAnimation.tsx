@@ -1,12 +1,13 @@
 import React from "react";
 import HabileLabsLogo from "components/ui/illustrations/airbyte-logo-icon.svg?react";
 
-type LogoAnimationProps = JSX.IntrinsicElements["svg"] & {
+type LogoAnimationProps = {
   title?: string;
   titleId?: string;
+  className?: string;
 };
 
-export const LogoAnimation: React.FC<LogoAnimationProps> = ({ title, titleId, ...props }) => {
+export const LogoAnimation: React.FC<LogoAnimationProps> = () => {
   return (
     <div
       style={{
