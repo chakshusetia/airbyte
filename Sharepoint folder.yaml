@@ -1,0 +1,85 @@
+version: "0.1.0"
+
+type: DeclarativeSource
+
+check:
+  type: CheckStream
+  stream_names:
+    - sharepoint_files
+
+definitions:
+  streams:
+    sharepoint_files:
+      type: DeclarativeStream
+      name: sharepoint_files
+      retriever:
+        type: SimpleRetriever
+        requester:
+          type: HttpRequester
+          url_base: https://graph.microsoft.com/v1.0/
+          http_method: GET
+          authenticator:
+            type: OAuthAuthenticator
+            token_refresh_endpoint: https://login.microsoftonline.com/{{ config['tenant_id'] }}/oauth2/v2.0/token
+            client_id: "{{ config['client_id'] }}"
+            client_secret: "{{ config['client_secret'] }}"
+            refresh_request_body:
+              grant_type: client_credentials
+              scope: https://graph.microsoft.com/.default
+
+        record_selector:
+          extractor:
+            type: DpathExtractor
+            field_path: ["value"]
+
+        paginator:
+          type: DefaultPaginator
+          pagination_strategy:
+            type: CursorPagination
+            cursor_value: "{{ response.get('@odata.nextLink', None) }}"
+            stop_condition: "{{ response.get('@odata.nextLink', None) is none }}"
+
+      partition_router:
+        type: NoPartitionRouter
+
+      path: >
+        sites/{{ config['domain'] }}:/sites/{{ config['site_name'] }}:/drives/{{ config['drive_name'] }}/root:/{{ config['folder_path'] }}:/children
+
+      primary_key: id
+
+streams:
+  - $ref: "#/definitions/streams/sharepoint_files"
+
+spec:
+  type: Spec
+  connection_specification:
+    type: object
+    required:
+      - tenant_id
+      - client_id
+      - client_secret
+      - domain
+      - site_name
+      - drive_name
+      - folder_path
+    properties:
+      tenant_id:
+        type: string
+      client_id:
+        type: string
+      client_secret:
+        type: string
+        airbyte_secret: true
+      domain:
+        type: string
+        description: "e.g. habilelabsio.sharepoint.com"
+      site_name:
+        type: string
+        description: "e.g. habilelabs"
+      drive_name:
+        type: string
+        description: "e.g. Documents or Shared Documents"
+      folder_path:
+        type: string
+        description: "e.g. sharepoint_airbyte"
+ 

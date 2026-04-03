@@ -1,0 +1,3 @@
+LOAD DATABASE
+  FROM sqlite:///E:/airbyte/data/sample_banking_relational.db
+  INTO postgresql://docker@localhost:5432/airbyte;
